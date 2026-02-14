@@ -23,6 +23,12 @@ spriteTitle:moveTo(200, 100)
 spriteButton:moveTo(200, 170)
 
 
+-- game over messages
+local spriteLoser = gfx.sprite.spriteWithText("oh... you died...", 400, 240)
+local spriteRetry = gfx.sprite.spriteWithText("press A to try again!", 400, 240)
+local spriteFinalScore = nil
+spriteLoser:moveTo(200, 70)
+spriteRetry:moveTo(200, 130)
 
 
 -- global though. don't do that later
@@ -36,3 +42,21 @@ function hideMenu()
     spriteTitle:remove()
     spriteButton:remove()
 end
+
+function showGameOver(score)
+    spriteFinalScore = gfx.sprite.spriteWithText("score: " .. score, 400, 240)
+    spriteFinalScore:moveTo(200, 100)
+    spriteFinalScore:add()
+    spriteLoser:add()
+    spriteRetry:add()
+end
+
+function hideGameOver()
+    if spriteFinalScore ~= nil then
+        spriteFinalScore:remove()
+    end
+    -- spriteFinalScore:remove()
+    spriteLoser:remove()
+    spriteRetry:remove()
+end
+

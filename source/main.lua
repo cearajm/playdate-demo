@@ -5,7 +5,6 @@ import "CoreLibs/crank"
 import "assets"
 import "sprites"
 import "menu"
-import "game_ui"
 
 local pd = playdate
 local gfx = pd.graphics
@@ -14,15 +13,24 @@ local gfx = pd.graphics
 -- show test object sprites
 local bulletTest = Bullet()
 
-local player = Player()
+-- local player = Player()
 local ticksPerRevolution = 1
 local revolutionsCount = 0
 local crankTicks = 0
 
 
+local enemy = Enemy()
+-- enemy:moveTo(200, 120)
+-- enemy:add()
+
+
 local function init()
 
+
     showMenu()
+
+
+
 end
 
 
@@ -31,7 +39,9 @@ end
 
 -- game state
 local gameState = "stopped"
+
 local score = 0
+local player = nil
 
 -- obstacle
 -- get image --> turn into sprite --> set collider dimensions
@@ -49,16 +59,19 @@ function pd.update()
     gfx.sprite.update()
 
 
-
-    if pd.buttonJustPressed(pd.kButtonA) then
+    
+    if gameState == "stopped" and pd.buttonJustPressed(pd.kButtonA) then
         gameState = "active"
         hideMenu()
+        hideGameOver()
+        player = Player()  -- create a new player each round to reset stats
         player:add()
+        enemy:add()
         -- bulletTest:add()
-    end
+    -- end
 
     -- update ammo and score in UI 
-    if gameState == "active" then
+    elseif gameState == "active" then
 
         -- reload by performing four full rotations of the crank
         -- only possible when fully out of ammo
@@ -81,8 +94,22 @@ function pd.update()
         -- update ammo and player's score on screen 
         gfx.drawTextAligned("score: " .. player.score, 15, 205, kTextAlignment.left)
         gfx.drawTextAligned(player.ammoStock .. "/3", 380, 205, kTextAlignment.right)
+
         
+        -- end game when the player dies
+        if player.isAlive == false then
+            gameState = "stopped"
+            showGameOver(player.score)
+            print(gameState)
+        end
+
+
+
+
     end
+
+    
+    print(gameState)
 
 
     -- draw score to screen
@@ -90,6 +117,7 @@ function pd.update()
     -- gfx.drawTextAligned("score: " .. score, 390, 10, kTextAlignment.right)
 
     --  if not sprite, do not pub before draw call
+
 
 
 end

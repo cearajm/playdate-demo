@@ -7,6 +7,7 @@ local imageBullet <const> = gfx.image.new(assets.bullet)
 class("Bullet").extends(gfx.sprite)  -- subclass
 
 
+
 function Bullet:init()
     -- new Bullet object with gfx bullet image
     Bullet.super.init(self, imageBullet)
@@ -14,13 +15,22 @@ function Bullet:init()
     self.velocityX = 0
     self.velocityY = 0
 
-    self.collisionResponse = gfx.sprite.kCollisionTypeOverlap  -- prevent shifting on collision
+    -- self.collisionResponse = gfx.sprite.kCollisionTypeOverlap  -- prevent shifting on collision
     self:setZIndex(5)
-    self:setCollideRect(0, 0, 48, 48)
-    self:moveTo(200, 120)
+    self:setCollideRect(0, 0, 25, 25)
+    -- self:moveTo(200, 120)
     
+    self.player = Player.instance
 
 end
+
+
+function Bullet:collisionResponse(other)
+    -- sets ?
+    -- collision type with every other sprite
+    return gfx.sprite.kCollisionTypeOverlap
+end
+
 
 function Bullet:spawn(posX, posY, velX, velY)
     -- params: players location
@@ -29,12 +39,29 @@ function Bullet:spawn(posX, posY, velX, velY)
     self:moveTo(posX, posY)
     self.velocityX = velX
     self.velocityY = velY
-
 end
+
+
 
 
 function Bullet:update()
     -- update position based on velocity
-    self:moveBy(self.velocityX, self.velocityY)
+    -- when using moveWithCollisions, add to self x and y
+    local _, _, collisions = self:moveWithCollisions(self.x + self.velocityX, self.y + self.velocityY)
+
+    -- idk how this works. go back and learn this
+    for _, collision in pairs(collisions) do
+        local other = collision.other
+
+        print("collided with: ")
+        print(other)
+
+        -- hit enemy and remove it
+        if getmetatable(other).class == Enemy then
+            other:destroy()
+            self:remove()
+            self.player:updateScore()
+        end
+    end
 
 end
