@@ -11,23 +11,25 @@ local playerStartY = 120
 local playerSpeed = 3
 
 function Player:init()
-    -- new Player object with gfx bullet image
+    -- constructor: new Player object with gfx bullet image
     Player.super.init(self, imagePlayer)
 
+    self.ammoStock = 3
+    self.score = 100
 
     self:setZIndex(1)
     self:setCollideRect(4, 4, 56, 40)
     self:moveTo(playerStartX, playerStartY)
 
-
 end
+
 
 function Player:update()
     -- update every frame
     Player.super.update(self)
+    
 
-
-    -- d-pad move controls
+    -- d-pad movement controls
     if pd.buttonIsPressed(pd.kButtonUp) then
         self:moveBy(0, -playerSpeed)
     end
@@ -40,4 +42,23 @@ function Player:update()
     if pd.buttonIsPressed(pd.kButtonRight) then
         self:moveBy(playerSpeed, 0)
     end
+
+    
+    -- spawn bullet at player's position
+    -- three bullet limit, before you need to recharge/reload (crank)
+    local isBButtonPressed = pd.buttonJustPressed(pd.kButtonB)
+    if isBButtonPressed then
+        if self.ammoStock > 0 then
+            local bullet = Bullet()
+            bullet:spawn(self.x, self.y, 0, -5)
+            bullet:add()
+            self.ammoStock -= 1
+        -- else
+        --     self.ammoStock = 3
+        end
+        print(self.ammoStock)
+    end
+
+    -- update ammo stock and score in UI
+
 end

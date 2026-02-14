@@ -1,9 +1,11 @@
 import "CoreLibs/graphics"
 import "CoreLibs/sprites"
+import "CoreLibs/crank"
 
 import "assets"
 import "sprites"
 import "menu"
+import "game_ui"
 
 local pd = playdate
 local gfx = pd.graphics
@@ -13,6 +15,9 @@ local gfx = pd.graphics
 local bulletTest = Bullet()
 
 local player = Player()
+local ticksPerRevolution = 1
+local revolutionsCount = 0
+local crankTicks = 0
 
 
 local function init()
@@ -43,18 +48,49 @@ local score = 0
 function pd.update()
     gfx.sprite.update()
 
+
+
     if pd.buttonJustPressed(pd.kButtonA) then
+        gameState = "active"
         hideMenu()
         player:add()
-        bulletTest:add()
+        -- bulletTest:add()
+    end
+
+    -- update ammo and score in UI 
+    if gameState == "active" then
+
+        -- reload by performing four full rotations of the crank
+        -- only possible when fully out of ammo
+        if player.ammoStock == 0 then
+            crankTicks = playdate.getCrankTicks(ticksPerRevolution)
+            if crankTicks == 1 then
+                    revolutionsCount += 1
+            end
+        else
+            revolutionsCount = 0
+        end
+
+        -- reset ammo supply
+        if revolutionsCount == 4 then
+            player.ammoStock = 3
+        end
+
+        -- print(revolutionsCount)
+
+        -- update ammo and player's score on screen 
+        gfx.drawTextAligned("score: " .. player.score, 15, 205, kTextAlignment.left)
+        gfx.drawTextAligned(player.ammoStock .. "/3", 380, 205, kTextAlignment.right)
+        
     end
 
 
     -- draw score to screen
     -- top right, text align to keep onscreen
-    gfx.drawTextAligned("score: " .. score, 390, 10, kTextAlignment.right)
+    -- gfx.drawTextAligned("score: " .. score, 390, 10, kTextAlignment.right)
 
     --  if not sprite, do not pub before draw call
+
 
 end
 
