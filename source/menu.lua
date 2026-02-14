@@ -55,7 +55,6 @@ function hideGameOver()
     if spriteFinalScore ~= nil then
         spriteFinalScore:remove()
     end
-    -- spriteFinalScore:remove()
     spriteLoser:remove()
     spriteRetry:remove()
 end

@@ -56,11 +56,13 @@ function Bullet:update()
         print("collided with: ")
         print(other)
 
-        -- hit enemy and remove it
+        -- hit enemy and remove it, then create a new one
         if getmetatable(other).class == Enemy then
             other:destroy()
             self:remove()
             self.player:updateScore()
+            local enemy = Enemy()
+            enemy:add()
         end
     end
 

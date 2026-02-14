@@ -29,8 +29,8 @@ function Player:init()
 end
 
 function Player:destroy()
-    self:remove()
     self.isAlive = false
+    self:remove()
 end
 
 

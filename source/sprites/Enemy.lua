@@ -9,11 +9,14 @@ function Enemy:init()
     -- construct enemy
     Enemy.super.init(self, imageEnemy)
 
+
+
     self.velocityX = 0
-    self.velocityY = 0
+    self.velocityY = 1
+    self.x = math.random(50, 350)
 
     self:setCollideRect(4, 4, 56, 40)
-    self:moveTo(200, 120)
+    self:moveTo(self.x, -50)
 
 end
 
@@ -23,17 +26,21 @@ function Enemy:collisionResponse(other)
 end
 
 
-
 function Enemy:destroy()
     self:remove()
 end
 
 function Enemy:update()
     -- get the player
-    -- local player = Player.instance
+    -- self.player = Player.instance
 
     local _, _, collisions = self:moveWithCollisions(self.x + self.velocityX, self.y + self.velocityY)
 
+    -- if  self.y > 100 then
+    --     self.player:destroy()
+    --     self:remove()
+
+    -- end
     -- kill player upon collision
     for _, collision in pairs(collisions) do
         local other = collision.other
