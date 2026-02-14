@@ -1,6 +1,6 @@
-name=Game
-author=
-description=
-bundleID=
+name=capybara adventure
+author=ceara
+description=capybara dodges rock (so cool)
+bundleID=com.ceara.capybara-adventure
 version=1.0.0
 buildNumber=1
