@@ -1,23 +1,25 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
 
+
+
 -- create gfx image from enemy image data
 local imageEnemy <const> = gfx.image.new(assets.enemy)
 class("Enemy").extends(gfx.sprite)
+
+local sfx_hit_enemy = pd.sound.sampleplayer.new(audio.hit_enemy)
+
 
 function Enemy:init()
     -- construct enemy
     Enemy.super.init(self, imageEnemy)
 
-
-
     self.velocityX = 0
-    self.velocityY = 1
-    self.x = math.random(50, 350)
+    self.velocityY = 1.5
+    self.x = math.random(50, 350)  -- spawn from top, with randomized x
 
     self:setCollideRect(4, 4, 56, 40)
     self:moveTo(self.x, -50)
-
 end
 
 
@@ -27,21 +29,22 @@ end
 
 
 function Enemy:destroy()
+    sfx_hit_enemy:play()
     self:remove()
 end
 
 function Enemy:update()
-    -- get the player
     self.player = Player.instance
 
-    local _, _, collisions = self:moveWithCollisions(self.x + self.velocityX, self.y + self.velocityY)
-
+    -- get top left coordinates and end the game if the enemy leaves the screen
     local w, h = self:getSize()
     if  (self.y - (h/2)) > 240 then
         self.player:destroy()
         self:remove()
-
     end
+
+    local _, _, collisions = self:moveWithCollisions(self.x + self.velocityX, self.y + self.velocityY)
+
     -- kill player upon collision
     for _, collision in pairs(collisions) do
         local other = collision.other

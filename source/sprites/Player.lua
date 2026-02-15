@@ -1,5 +1,6 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
+local sfx <const> = pd. sound.sampleplayer
 
 -- create gfx image from bullet image data
 local imagePlayer <const> = gfx.image.new(assets.player)
@@ -9,6 +10,13 @@ class("Player").extends(gfx.sprite)
 local playerStartX = 100
 local playerStartY = 120
 local playerSpeed = 3
+
+-- sfx players for each sample
+local sfx_shoot = sfx.new(audio.shoot)
+local sfx_ammo_empty = sfx.new(audio.ammo_empty)
+local sfx_player_death = sfx.new(audio.player_death)
+local sfx_game_over = sfx.new(audio.game_over)
+local sfx_move_disabled = sfx.new(audio.move_disabled)
 
 
 
@@ -27,29 +35,30 @@ function Player:init()
     self:setScale(2)
     self:setZIndex(1)
     self:setCollideRect(4, 4, 45, 50)
-    -- self.collisionResponse = gfx.sprite.kCollisionTypeFreeze
+    self:setTag(1)
 
+    -- self.collisionResponse = gfx.sprite.kCollisionTypeFreeze
     -- self:setCollidesWithGroups(2)
 
     self:moveTo(playerStartX, playerStartY)
-
-    self:setTag(1)
 
 end
 
 
 function Player:toggleMove()
+    -- toggle to false if the player runs out of ammo
     if self.canMove then
-        -- playerSpeed = 3
         self.canMove = false
     else
-        -- playerSpeed = 0
         self.canMove = true
     end
 end
 
 
 function Player:destroy()
+    -- remove player sprite and end the game
+    sfx_player_death:play()
+    sfx_game_over:play()
     self.isAlive = false
     self:remove()
 end
@@ -61,6 +70,7 @@ end
 
 
 function Player:collisionResponse(other)
+    -- handle collision types based on the type of colliding entity
     if getmetatable(other).class == Wall then
         return gfx.sprite.kCollisionTypeFreeze
     else
@@ -70,13 +80,11 @@ end
 
 
 function Player:update()
-    -- update every frame
+
     Player.super.update(self)
 
-
+    -- d-pad movement controls
     if self.canMove == true then
-        
-        -- d-pad movement controls
         if pd.buttonIsPressed(pd.kButtonUp) then
             self:moveBy(0, -playerSpeed)
         end
@@ -89,40 +97,44 @@ function Player:update()
         if pd.buttonIsPressed(pd.kButtonRight) then
             self:moveBy(playerSpeed, 0)
         end
+    else
+        -- sfx when movement is disabled
+        if pd.buttonJustPressed(pd.kButtonUp) or
+            pd.buttonJustPressed(pd.kButtonDown) or
+            pd.buttonJustPressed(pd.kButtonLeft) or
+            pd.buttonJustPressed(pd.kButtonRight) then
+                sfx_move_disabled:play()
+        end
     end
 
     
-
-    -- spawning bullet
-
     -- spawn bullet at player's position
     -- three bullet limit, before you need to recharge/reload (crank)
     local isBButtonPressed = pd.buttonJustPressed(pd.kButtonB)
+
     if isBButtonPressed then
         if self.ammoStock > 0 then
             local bullet = Bullet()
-            bullet:spawn(self.x, self.y, 0, -5)
+            bullet:spawn(self.x, self.y, 0, -5)  -- create at player location
             bullet:add()
             self.ammoStock -= 1
-        -- else
-        --     self.ammoStock = 3
+
+            sfx_shoot:play()
+
+        else
+            sfx_ammo_empty:play()
+            
         end
         -- print(self.ammoStock)
     end
 
 
-
+    -- handle collisions
     local _, _, collisions = self:moveWithCollisions(self.x, self.y)
 
     for _, collision in pairs(collisions) do
         local other = collision.other
-        
-        -- if getmetatable(other).class == Wall then
-        --     self:collisionResponse(other)
-        
-        -- end
     end
 
-    -- update ammo stock and score in UI
 
 end

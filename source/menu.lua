@@ -1,9 +1,15 @@
 local pd <const> = playdate
 local gfx <const> = pd.graphics
 
+--[[ 
+This handles the start and game over screens.
+Does not handle the score or ammo stock displays. those are in the player class. cus i just dumped it all in there
+]]
+
+
+
 local spriteTitle = gfx.sprite.new()
 local spriteButton = gfx.sprite.spriteWithText("ok press A to start", 400, 240)
-
 gfx.setFontFamily(gfx.getFont(gfx.font.kVariantBold))
 
 -- create title as an image
@@ -15,12 +21,11 @@ gfx.pushContext(imageSpriteTitle)
 gfx.drawTextAligned("cool game", 100, 60, kTextAlignment.center)
 gfx.popContext()  -- release image
 
-
-spriteTitle:setImage(imageSpriteTitle:scaledImage(2)) -- scale into a separate image
-
--- coordinate position
+ -- scale into a separate image and move
+spriteTitle:setImage(imageSpriteTitle:scaledImage(2))
 spriteTitle:moveTo(200, 100)
 spriteButton:moveTo(200, 170)
+
 
 
 -- game over messages
@@ -31,6 +36,7 @@ spriteLoser:moveTo(200, 115)
 spriteRetry:moveTo(200, 150)
 
 
+-- display/hide functions
 -- global though. don't do that later
 function showMenu()
     -- add to screen

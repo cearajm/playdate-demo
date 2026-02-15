@@ -6,19 +6,25 @@ import "assets"
 import "sprites"
 import "menu"
 
-local pd = playdate
-local gfx = pd.graphics
+local pd <const> = playdate
+local gfx <const> = pd.graphics
 
 
--- show test object sprites
-local bulletTest = Bullet()
 
-player = Player()
+
+-- declare entities/values
+local player = Player()
 local enemy = Enemy()
+
 local ticksPerRevolution = 1
 local revolutionsCount = 0
 local crankTicks = 0
 
+-- game state
+local gameState = "stopped"
+
+local sfx_start = pd.sound.sampleplayer.new(audio.start)
+local sfx_reload = pd.sound.sampleplayer.new(audio.reload)
 
 
 
@@ -28,21 +34,21 @@ local function init()
 end
 
 
--- game state
-local gameState = "stopped"
-
 function pd.update()
     gfx.sprite.update()
 
     -- display title, press A to start the game
     if gameState == "stopped" and pd.buttonJustPressed(pd.kButtonA) then
-        gameState = "active"
         hideMenu()
         hideGameOver()
+        gameState = "active"
+        sfx_start:play()
+
         player = Player()  -- create a new player and enemy each round to reset
         enemy = Enemy()
         player:add()
         enemy:add()
+
 
     -- update ammo and score in UI 
     elseif gameState == "active" then
@@ -62,6 +68,7 @@ function pd.update()
         if revolutionsCount == 4 then
             player.ammoStock = 3
             player.canMove = true
+            sfx_reload:play()
         end
 
         -- print(revolutionsCount)
@@ -71,10 +78,6 @@ function pd.update()
         gfx.drawTextAligned(player.ammoStock .. "/3", 380, 205, kTextAlignment.right)
 
 
-        -- if enemy.y > 220 then
-        --     print("die")
-        -- end
-        
         -- end game when the player dies
         if player.isAlive == false then
             gameState = "stopped"
@@ -82,25 +85,11 @@ function pd.update()
             showGameOver(player.score)
             -- print(gameState)
         end
-
-
-
-
     end
-
-    
-    -- print(gameState)
-
-
-    -- draw score to screen
-    -- top right, text align to keep onscreen
-    -- gfx.drawTextAligned("score: " .. score, 390, 10, kTextAlignment.right)
-
-    --  if not sprite, do not pub before draw call
-
 
 
 end
+
 
 init()
 

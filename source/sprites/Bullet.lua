@@ -1,6 +1,7 @@
 local gfx <const> = playdate.graphics
 
--- local consts
+
+
 
 -- create gfx image from bullet image data
 local imageBullet <const> = gfx.image.new(assets.bullet)
@@ -15,10 +16,8 @@ function Bullet:init()
     self.velocityX = 0
     self.velocityY = 0
 
-    -- self.collisionResponse = gfx.sprite.kCollisionTypeOverlap  -- prevent shifting on collision
     self:setZIndex(5)
     self:setCollideRect(0, 0, 25, 25)
-    -- self:moveTo(200, 120)
     
     self.player = Player.instance
 
@@ -40,7 +39,6 @@ function Bullet:spawn(posX, posY, velX, velY)
     self.velocityX = velX
     self.velocityY = velY
 end
-
 
 
 
