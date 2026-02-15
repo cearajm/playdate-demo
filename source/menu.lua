@@ -24,11 +24,11 @@ spriteButton:moveTo(200, 170)
 
 
 -- game over messages
-local spriteLoser = gfx.sprite.spriteWithText("oh... you died...", 400, 240)
+local spriteLoser = gfx.sprite.spriteWithText("oh... you failed ...", 400, 240)
 local spriteRetry = gfx.sprite.spriteWithText("press A to try again!", 400, 240)
 local spriteFinalScore = nil
-spriteLoser:moveTo(200, 70)
-spriteRetry:moveTo(200, 130)
+spriteLoser:moveTo(200, 115)
+spriteRetry:moveTo(200, 150)
 
 
 -- global though. don't do that later
@@ -45,7 +45,8 @@ end
 
 function showGameOver(score)
     spriteFinalScore = gfx.sprite.spriteWithText("score: " .. score, 400, 240)
-    spriteFinalScore:moveTo(200, 100)
+    spriteFinalScore:setScale(1.5)
+    spriteFinalScore:moveTo(200, 85)
     spriteFinalScore:add()
     spriteLoser:add()
     spriteRetry:add()

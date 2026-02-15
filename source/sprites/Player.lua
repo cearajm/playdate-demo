@@ -22,6 +22,7 @@ function Player:init()
     self.ammoStock = 3
     self.score = 4
     self.isAlive = true
+    self.canMove = true
 
     self:setScale(2)
     self:setZIndex(1)
@@ -36,14 +37,17 @@ function Player:init()
 
 end
 
-function Player:collisionResponse(other)
-    if getmetatable(other).class == Wall then
-        return gfx.sprite.kCollisionTypeFreeze
-    else
-        return gfx.sprite.kCollisionTypeOverlap
 
+function Player:toggleMove()
+    if self.canMove then
+        -- playerSpeed = 3
+        self.canMove = false
+    else
+        -- playerSpeed = 0
+        self.canMove = true
     end
 end
+
 
 function Player:destroy()
     self.isAlive = false
@@ -51,9 +55,17 @@ function Player:destroy()
 end
 
 
-
 function Player:updateScore()
     self.score += 1
+end
+
+
+function Player:collisionResponse(other)
+    if getmetatable(other).class == Wall then
+        return gfx.sprite.kCollisionTypeFreeze
+    else
+        return gfx.sprite.kCollisionTypeOverlap
+    end
 end
 
 
@@ -62,19 +74,24 @@ function Player:update()
     Player.super.update(self)
 
 
-    -- d-pad movement controls
-    if pd.buttonIsPressed(pd.kButtonUp) then
-        self:moveBy(0, -playerSpeed)
+    if self.canMove == true then
+        
+        -- d-pad movement controls
+        if pd.buttonIsPressed(pd.kButtonUp) then
+            self:moveBy(0, -playerSpeed)
+        end
+        if pd.buttonIsPressed(pd.kButtonDown) then
+            self:moveBy(0, playerSpeed)
+        end
+        if pd.buttonIsPressed(pd.kButtonLeft) then
+            self:moveBy(-playerSpeed, 0)
+        end
+        if pd.buttonIsPressed(pd.kButtonRight) then
+            self:moveBy(playerSpeed, 0)
+        end
     end
-    if pd.buttonIsPressed(pd.kButtonDown) then
-        self:moveBy(0, playerSpeed)
-    end
-    if pd.buttonIsPressed(pd.kButtonLeft) then
-        self:moveBy(-playerSpeed, 0)
-    end
-    if pd.buttonIsPressed(pd.kButtonRight) then
-        self:moveBy(playerSpeed, 0)
-    end
+
+    
 
     -- spawning bullet
 
@@ -90,10 +107,12 @@ function Player:update()
         -- else
         --     self.ammoStock = 3
         end
-        print(self.ammoStock)
+        -- print(self.ammoStock)
     end
 
-        local _, _, collisions = self:moveWithCollisions(self.x, self.y)
+
+
+    local _, _, collisions = self:moveWithCollisions(self.x, self.y)
 
     for _, collision in pairs(collisions) do
         local other = collision.other

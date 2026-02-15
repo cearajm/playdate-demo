@@ -53,8 +53,8 @@ function Bullet:update()
     for _, collision in pairs(collisions) do
         local other = collision.other
 
-        print("collided with: ")
-        print(other)
+        -- print("collided with: ")
+        -- print(other)
 
         -- hit enemy and remove it, then create a new one
         if getmetatable(other).class == Enemy then

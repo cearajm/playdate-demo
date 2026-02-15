@@ -32,15 +32,16 @@ end
 
 function Enemy:update()
     -- get the player
-    -- self.player = Player.instance
+    self.player = Player.instance
 
     local _, _, collisions = self:moveWithCollisions(self.x + self.velocityX, self.y + self.velocityY)
 
-    -- if  self.y > 100 then
-    --     self.player:destroy()
-    --     self:remove()
+    local w, h = self:getSize()
+    if  (self.y - (h/2)) > 240 then
+        self.player:destroy()
+        self:remove()
 
-    -- end
+    end
     -- kill player upon collision
     for _, collision in pairs(collisions) do
         local other = collision.other

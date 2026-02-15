@@ -50,6 +50,7 @@ function pd.update()
         -- only possible when fully out of ammo
         if player.ammoStock == 0 then
             crankTicks = playdate.getCrankTicks(ticksPerRevolution)
+            player.canMove = false
             if crankTicks == 1 then
                     revolutionsCount += 1
             end
@@ -60,6 +61,7 @@ function pd.update()
         -- reset ammo supply
         if revolutionsCount == 4 then
             player.ammoStock = 3
+            player.canMove = true
         end
 
         -- print(revolutionsCount)
@@ -69,9 +71,9 @@ function pd.update()
         gfx.drawTextAligned(player.ammoStock .. "/3", 380, 205, kTextAlignment.right)
 
 
-        if enemy.y > 220 then
-            print("die")
-        end
+        -- if enemy.y > 220 then
+        --     print("die")
+        -- end
         
         -- end game when the player dies
         if player.isAlive == false then
@@ -87,7 +89,7 @@ function pd.update()
     end
 
     
-    print(gameState)
+    -- print(gameState)
 
 
     -- draw score to screen
