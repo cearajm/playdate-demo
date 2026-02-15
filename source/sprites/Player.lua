@@ -10,6 +10,8 @@ local playerStartX = 100
 local playerStartY = 120
 local playerSpeed = 3
 
+
+
 function Player:init()
     -- constructor: new Player object with gfx bullet image
     Player.super.init(self, imagePlayer)
@@ -24,8 +26,23 @@ function Player:init()
     self:setScale(2)
     self:setZIndex(1)
     self:setCollideRect(4, 4, 45, 50)
+    -- self.collisionResponse = gfx.sprite.kCollisionTypeFreeze
+
+    -- self:setCollidesWithGroups(2)
+
     self:moveTo(playerStartX, playerStartY)
 
+    self:setTag(1)
+
+end
+
+function Player:collisionResponse(other)
+    if getmetatable(other).class == Wall then
+        return gfx.sprite.kCollisionTypeFreeze
+    else
+        return gfx.sprite.kCollisionTypeOverlap
+
+    end
 end
 
 function Player:destroy()
@@ -43,6 +60,7 @@ end
 function Player:update()
     -- update every frame
     Player.super.update(self)
+
 
     -- d-pad movement controls
     if pd.buttonIsPressed(pd.kButtonUp) then
@@ -73,6 +91,17 @@ function Player:update()
         --     self.ammoStock = 3
         end
         print(self.ammoStock)
+    end
+
+        local _, _, collisions = self:moveWithCollisions(self.x, self.y)
+
+    for _, collision in pairs(collisions) do
+        local other = collision.other
+        
+        -- if getmetatable(other).class == Wall then
+        --     self:collisionResponse(other)
+        
+        -- end
     end
 
     -- update ammo stock and score in UI

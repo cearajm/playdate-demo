@@ -3,3 +3,4 @@
 import "sprites/Player"
 import "sprites/Bullet"
 import "sprites/Enemy"
+import "sprites/Walls"

@@ -13,7 +13,7 @@ local gfx = pd.graphics
 -- show test object sprites
 local bulletTest = Bullet()
 
-local player = Player()
+player = Player()
 local enemy = Enemy()
 local ticksPerRevolution = 1
 local revolutionsCount = 0
@@ -21,8 +21,10 @@ local crankTicks = 0
 
 
 
+
 local function init()
     showMenu()
+    setWalls()
 end
 
 
