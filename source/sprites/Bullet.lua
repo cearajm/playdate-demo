@@ -16,8 +16,9 @@ function Bullet:init()
     self.velocityX = 0
     self.velocityY = 0
 
+    self:setScale(2)
     self:setZIndex(5)
-    self:setCollideRect(0, 0, 25, 25)
+    self:setCollideRect(0, 0, self:getSize())
     
     self.player = Player.instance
 

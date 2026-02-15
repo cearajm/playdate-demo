@@ -28,7 +28,7 @@ function Player:init()
     Player.instance = self
 
     self.ammoStock = 3
-    self.score = 4
+    self.score = 0
     self.isAlive = true
     self.canMove = true
 
@@ -107,7 +107,7 @@ function Player:update()
         end
     end
 
-    
+
     -- spawn bullet at player's position
     -- three bullet limit, before you need to recharge/reload (crank)
     local isBButtonPressed = pd.buttonJustPressed(pd.kButtonB)

@@ -1,0 +1,14 @@
+
+
+Controls:
+- press A to start the game.
+- control pancake the hamster with the d-pad.
+- press B to shoot sunflower seeds at the approaching enemy stoats.
+- there is a 3 seed capacity. when pancake is out of seeds, he can't move!
+- refill the seeds by spinning the crank 4 times. seeds can only be replenished when fully depleted.
+- gain a point for each stoat defeated. the game ends when pancake dies, or a stoat gets away.
+
+credits:
+- art by me
+- stoat design inspired by inscryption
+- audio samples from kirby air ride

@@ -4,9 +4,10 @@
 assets = {
     -- bullet = "images/rock",
     -- player = "images/capybara"
-    bullet = "images/ham_sprite",
-    player = "images/ham_sprite",
-    enemy = "images/capybara"
+    -- player = "images/ham_sprite",
+    bullet = "images/seed",
+    player = "images/hamster",
+    enemy = "images/stoat"
 }
 
 audio = {

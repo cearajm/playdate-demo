@@ -1,9 +1,0 @@
-
-
-
-# to do
-
-- wall collision
-- enemy miss
-- sound effects
-- sprite pixel art

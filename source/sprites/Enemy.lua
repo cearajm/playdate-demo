@@ -16,10 +16,14 @@ function Enemy:init()
 
     self.velocityX = 0
     self.velocityY = 1.5
-    self.x = math.random(50, 350)  -- spawn from top, with randomized x
+    self.spawnX = math.random(50, 350)  -- spawn from top, with randomized x
 
-    self:setCollideRect(4, 4, 56, 40)
-    self:moveTo(self.x, -50)
+
+    self:setScale(2)
+    local w, h = self:getSize()
+
+    self:setCollideRect(4, 4, w - 6, h - 4)
+    self:moveTo(self.spawnX, -50)
 end
 
 

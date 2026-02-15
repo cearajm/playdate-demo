@@ -8,9 +8,10 @@ Does not handle the score or ammo stock displays. those are in the player class.
 
 
 
-local spriteTitle = gfx.sprite.new()
-local spriteButton = gfx.sprite.spriteWithText("ok press A to start", 400, 240)
 gfx.setFontFamily(gfx.getFont(gfx.font.kVariantBold))
+
+local spriteTitle = gfx.sprite.new()
+local spriteButton = gfx.sprite.spriteWithText("press A to start", 400, 240)
 
 -- create title as an image
 local imageSpriteTitle = gfx.image.new(200, 120)
@@ -18,22 +19,22 @@ local imageSpriteTitle = gfx.image.new(200, 120)
 -- draw text on the image (centered)
 -- push: save imageSpriteTitle as the current image to draw to, with draw functions
 gfx.pushContext(imageSpriteTitle)
-gfx.drawTextAligned("cool game", 100, 60, kTextAlignment.center)
+gfx.drawTextAligned("pancake 2: vengeance", 100, 60, kTextAlignment.center)
 gfx.popContext()  -- release image
 
  -- scale into a separate image and move
-spriteTitle:setImage(imageSpriteTitle:scaledImage(2))
-spriteTitle:moveTo(200, 100)
-spriteButton:moveTo(200, 170)
+spriteTitle:setImage(imageSpriteTitle:scaledImage(1.6))
+spriteTitle:moveTo(200, 80)
+spriteButton:moveTo(200, 150)
 
 
 
 -- game over messages
-local spriteLoser = gfx.sprite.spriteWithText("oh... you failed ...", 400, 240)
+local spriteLoser = gfx.sprite.spriteWithText("oh... bested by a stoat ...", 400, 240)
 local spriteRetry = gfx.sprite.spriteWithText("press A to try again!", 400, 240)
 local spriteFinalScore = nil
-spriteLoser:moveTo(200, 115)
-spriteRetry:moveTo(200, 150)
+spriteLoser:moveTo(200, 120)
+spriteRetry:moveTo(200, 160)
 
 
 -- display/hide functions
@@ -51,7 +52,7 @@ end
 
 function showGameOver(score)
     spriteFinalScore = gfx.sprite.spriteWithText("score: " .. score, 400, 240)
-    spriteFinalScore:setScale(1.5)
+    spriteFinalScore:setScale(2)
     spriteFinalScore:moveTo(200, 85)
     spriteFinalScore:add()
     spriteLoser:add()
